@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # My system IP/set ip address of server
 MY_OWN_IP="YOUR.PUBLIC.IP.ADDR"
