@@ -1,32 +1,53 @@
-#!/bin/sh
+#!/bin/bash
 
-function create_sec_group_for_isolate_classic-instance() {
+# My system IP/set ip address of server
+MY_OWN_IP="YOUR.PUBLIC.IP.ADDR"
+SG_BLOCK_ID="sg-BLOCK-ID"
+VPC_ID="vpc-1a2b3c4d"
+CLASSIC_EC2_INSTANCE=false
+
+function create_sec_group_for_isolate_classic_instance() {
     aws ec2 create-security-group --group-name isolation-sg --description "Security group for isolating EC2-Classic instances"
 }
 
-
 function create_sec_group_for_isolation() {
-    local vpc_id=$1
-
-    vpc-1a2b3c4d 
-
-    # where vpc-1a2b3c4d is the VPC ID that the instance is member of
-    aws ec2 create-security-group --group-name isolation-sg --description "Security group to isolate a EC2-VPC instance" --vpc-id ${vpc_id}
+    aws ec2 create-security-group --group-name isolation-sg --description "Security group to isolate a EC2-VPC instance" --vpc-id ${VPC_ID}
 }
 
+function allow_ssh_access_only_from_own_public_ip() {
+    dig +short myip.opendns.com @resolver1.opendns.com
+    aws ec2 authorize-security-group-ingress --group-name isolation-sg --protocol tcp --port 22 --cidr ${MY_OWN_IP}/32
+    aws ec2 authorize-security-group-ingress --group-id ${SG_BLOCK_ID} --protocol tcp --port 22 --cidr ${MY_OWN_IP}/32 
+    # note the difference between both commands in group-name and group-id, sg-BLOCK-ID is the ID of your isolation-sg
+}
 
-#Set a rule to allow SSH access from your public IP only, but first we have to know our public IP:
-dig +short myip.opendns.com @resolver1.opendns.com
-aws ec2 authorize-security-group-ingress --group-name isolation-sg --protocol tcp --port 22 --cidr YOUR.IP.ADDRESS.HERE/32
-aws ec2 authorize-security-group-ingress --group-id sg-BLOCK-ID --protocol tcp --port 22 --cidr YOUR.IP.ADDRESS.HERE/32 
-# note the difference between both commands in group-name and group-id, sg-BLOCK-ID is the ID of your isolation-sg
+function totally_block_outbund_traffic() {
+    aws ec2 revoke-security-group-egress --group-id ${SG_BLOCK_ID} --protocol '-1' --port all --cidr '0.0.0.0/0' 
+}
 
-#In EC2-Classic Security Groups don’t support outbound rules, I provide a script below to totally block outbound traffic within the instance. However, for EC2-VPC Security Groups, outbound rules can be set with these commands:
-aws ec2 revoke-security-group-egress --group-id sg-BLOCK-ID --protocol '-1' --port all --cidr '0.0.0.0/0’ 
-# removed rule that allows all outbound traffic
-aws ec2 authorize-security-group-egress --group-id sg-BLOCK-ID --protocol 'tcp' --port 80 --cidr '0.0.0.0/0’ 
-# place a port or IP if you want to enable some other outbound traffic otherwise do not execute this command.
+function remove_rule_that_allows_all_outbound_traffic() {
+    aws ec2 authorize-security-group-egress --group-id ${SG_BLOCK_ID} --protocol 'tcp' --port 80 --cidr '0.0.0.0/0' 
+    # place a port or IP if you want to enable some other outbound traffic otherwise do not execute this command.
+}
+
+function isolate_compromised_instance() {
+    if [ $CLASSIC_EC2_INSTANCE = true ]; then
+        create_sec_group_for_isolate_classic_instance
+    else
+        create_sec_group_for_isolation
+    fi
+
+    allow_ssh_access_only_from_own_public_ip
+    totally_block_outbund_traffic
+    remove_rule_that_allows_all_outbound_traffic
+}
 
 #Apply that Security Group to the compromised instance:
-aws ec2 modify-instance-attribute --instance-id i-INSTANCE-ID --groups sg-BLOCK-ID 
-# where sg-BLOCK-ID is the ID of your isolation-sg
+function apply_sg_to_compromized_instance() {
+    aws ec2 modify-instance-attribute --instance-id i-INSTANCE-ID --groups ${SG_BLOCK_ID} 
+    # where sg-BLOCK-ID is the ID of your isolation-sg
+
+}
+
+isolate_compromised_instance
+apply_sg_to_compromized_instance
