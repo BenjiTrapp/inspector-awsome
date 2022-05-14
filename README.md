@@ -1,7 +1,7 @@
 <br/>
 <div id="logo" align="center">
     <br />
-    <img src="docs/inspector.png" alt="Logo" width="333"/>
+    <img src="docs/inspector.png" alt="Logo" width="222"/>
     <h3>Inspector Awesome</h3>
 </div>
 <br>
