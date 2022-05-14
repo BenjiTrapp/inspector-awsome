@@ -1,11 +1,12 @@
-# inspector-awsome
+<br/>
+<div id="logo" align="center">
+    <br />
+    <img src="docs/inspector.png" alt="Logo" width="333"/>
+    <h3>Inspector Awesome</h3>
+</div>
+<br>
 
 Tiny collection of scripts to isolate an EC2 instance and start with the joy of forensics.
-
-
-<p align="center">
-<img width="400" src="docs/inspector.png">
-</p>
 
 In the case of a compromised EC2 instance within your fleet, it's time for getting prepared for Incident Response and Threat Hunting. To get started you have two Options:
 
