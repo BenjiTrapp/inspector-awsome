@@ -30,17 +30,6 @@ function jail_the_box() {
     iptables -A OUTPUT -j DROP
 }
 
-=========================================
-function test_firewalld() {
-    firewall-cmd --add-rich-rule="rule family="ipv4" source address="$MY_OWN_IP" service name="ssh" accept"
-    firewall-cmd --zone=internal --add-service=ssh
-    firewall-cmd --zone=internal --add-source=192.168.56.105/32
-    firewall-cmd --zone=internal --add-source=192.168.56.120/32
-    firewall-cmd --zone=public --remove-service=ssh
-}
-
-#test_firewalld
-=========================================
 
 function isolate_instance() {
     flush_all_rules
@@ -52,3 +41,15 @@ function isolate_instance() {
 
 
 isolate_instance
+
+=========================================
+function test_firewalld() {
+    firewall-cmd --add-rich-rule="rule family="ipv4" source address="$MY_OWN_IP" service name="ssh" accept"
+    firewall-cmd --zone=internal --add-service=ssh
+    firewall-cmd --zone=internal --add-source=192.168.56.105/32
+    firewall-cmd --zone=internal --add-source=192.168.56.120/32
+    firewall-cmd --zone=public --remove-service=ssh
+}
+
+#test_firewalld
+=========================================
