@@ -2,7 +2,10 @@
 
 Tiny collection of scripts to isolate an EC2 instance and start with the joy of forensics.
 
-![](docs/inspector.png)
+
+<p align="center">
+<img width="400" src="docs/inspector.png">
+</p>
 
 In the case of a compromised EC2 instance within your fleet, it's time for getting prepared for Incident Response and Threat Hunting. To get started you have two Options:
 
@@ -23,8 +26,9 @@ You'll find the following scripts:
 
 The easiest way in is this overview:
 
+
 <p align="center">
-<img width="600" src="docs/inspector.png">
+<img width="600" src="docs/clean-room-stepfunction.png">
 </p>
 
 Like shown above - the StepFunction will take an instance ID passed by an SNS topic through a series of Lambda Functions. During the execution the Step Function will automatically notify, isolate and run basic forensics.
