@@ -17,11 +17,11 @@ In the case of a compromised EC2 instance within your fleet, it's time for getti
 
 You'll find the following scripts:
 
-| Script name      | Semantics                 |
-| -----------------|---------------------------|
-| get-all-instances-since-date-x.sh | Collect |
-| isolate-ec2-instance-internal.sh | dwd |
-| isolate-ec2-instance-external.sh | dwd |
+| Script name                       | Semantics                                                                |
+| ----------------------------------|--------------------------------------------------------------------------|
+| get-all-instances-since-date-x.sh | Collect all instances based on a given date as a starting date           |
+| isolate-ec2-instance-internal.sh  | Isolate the EC2 instance from within the instance (use SSM for that)     |
+| isolate-ec2-instance-external.sh  | Isolate the EC2 instance from your local machine and the help of AWS CLI |
 
 ## Step Function Kung-Fu
 
