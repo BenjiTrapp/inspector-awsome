@@ -2,7 +2,7 @@
 <div id="logo" align="center">
     <br />
     <img src="docs/inspector.png" alt="Logo" width="222"/>
-    <h3>Inspector Awesome</h3>
+    <h3>Inspector AWSome</h3>
 </div>
 <br>
 
