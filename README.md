@@ -2,7 +2,7 @@
 <div id="logo" align="center">
     <br />
     <img src="docs/inspector.png" alt="Logo" width="333"/>
-    <h3>Inspector Awesome</h3>
+    <h3>Inspector AWSome</h3>
 </div>
 <br>
 
@@ -26,7 +26,9 @@ You'll find the following scripts:
 ## Step Function Kung-Fu
 
 The easiest way in is this overview:
-
+<p align="center">
+<img width="600" src="docs/cleanroom-architecture.png">
+</p>
 
 <p align="center">
 <img width="600" src="docs/clean-room-stepfunction.png">
